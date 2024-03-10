@@ -1,11 +1,22 @@
 #!/bin/bash
 ###
 # This script ensures CPU limits are applied to all service plans created by resellers
-# It is triggered by Plesk Event Handlers:
-# plesk bin event_handler --create -priority 50 -user root -event template_domain_create -command '/usr/local/bin/plesk_reseller_serviceplan_event.sh'
-# plesk bin event_handler --create -priority 50 -user root -event template_domain_update -command '/usr/local/bin/plesk_reseller_serviceplan_event.sh'
+# It's triggered by Plesk event handlers when resellers create or update their service plans
 ###
 CPU=100
+BIN=/usr/local/bin/plesk_reseller_serviceplan_event.sh
+
+if [ ! -e "$BIN" ]
+        echo "Installing to $BIN"
+        cp "$0" $BIN
+        chmod +x $BIN
+fi
+
+if ! plesk bin event_handler --list | grep "$BIN"; then
+        echo 'Creating Plesk Events...'
+        plesk bin event_handler --create -priority 50 -user root -event template_domain_create -command "$BIN"
+        plesk bin event_handler --create -priority 50 -user root -event template_domain_update -command "$BIN"
+fi
 
 plesk db -ENe "SELECT Templates.name,clients.login FROM Templates LEFT JOIN clients ON Templates.owner_id=clients.id WHERE clients.type='reseller';" |
 while read -r  line
