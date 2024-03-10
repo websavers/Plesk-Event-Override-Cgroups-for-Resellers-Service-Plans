@@ -2,6 +2,7 @@
 ###
 # This script ensures CPU limits are applied to all service plans created by resellers
 # It's triggered by Plesk event handlers when resellers create or update their service plans
+# Simply run it once to both install Event Handlers and update existing reseller service plans
 ###
 CPU=100
 BIN=/usr/local/bin/plesk_reseller_serviceplan_event.sh
