@@ -7,7 +7,7 @@
 CPU=100
 BIN=/usr/local/bin/plesk_reseller_serviceplan_event.sh
 
-if [ ! -e "$BIN" ]
+if [ ! -e "$BIN" ]; then
         echo "Installing to $BIN"
         cp "$0" $BIN
         chmod +x $BIN
