@@ -36,7 +36,8 @@ do
                 echo "Checking service plan '$plan_name' owned by '$reseller_login'..."
                 if ! plesk bin service_plan -i "$plan_name" -owner "$reseller_login" | grep -E "Maximum CPU usage\s+$CPU"; then
                         echo "Updating service plan '$plan_name' owned by '$reseller_login'..."
-                        plesk bin service_plan --update "$plan_name" -owner "$reseller_login" -cgroups_cpu_usage $CPU -cgroups_cpu_period 3600
+                        plesk bin service_plan --update "$plan_name" -owner "$reseller_login" -cgroups_cpu_usage $CPU
+                        #plesk bin service_plan --update "$plan_name" -owner "$reseller_login" -cgroups_cpu_period $CPU
                 fi
         fi
 done
