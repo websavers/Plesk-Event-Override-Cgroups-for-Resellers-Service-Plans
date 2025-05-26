@@ -1,11 +1,13 @@
 #!/bin/bash
 ###
-# This script ensures CPU limits are applied to all service plans created by resellers
+# This script ensures cgroups CPU limits are applied to all service plans created by resellers
 # It's triggered by Plesk event handlers when resellers create or update their service plans
 # Simply run it once to both install Event Handlers and update existing reseller service plans
 ###
 CPU=100
 BIN=/usr/local/bin/plesk_reseller_serviceplan_event.sh
+
+if ! plesk bin service --status resctrl; then exit; fi
 
 if [ ! -e "$BIN" ]; then
         echo "Installing to $BIN"
@@ -15,6 +17,7 @@ fi
 
 if ! plesk bin event_handler --list | grep "$BIN"; then
         echo 'Creating Plesk Events...'
+        # When service plan created or updated
         plesk bin event_handler --create -priority 50 -user root -event template_domain_create -command "$BIN"
         plesk bin event_handler --create -priority 50 -user root -event template_domain_update -command "$BIN"
 fi
