@@ -7,7 +7,7 @@
 CPU=100
 BIN=/usr/local/bin/plesk_reseller_serviceplan_event.sh
 
-if ! plesk bin service --status resctrl; then exit; fi
+if ! plesk bin service --status resctrl >/dev/null 2>&1; then exit; fi
 
 if [ ! -e "$BIN" ]; then
         echo "Installing to $BIN"
